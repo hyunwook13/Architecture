@@ -10,7 +10,7 @@ import UIKit
 final class AlbumCellView: UIView {
     
     private var album: Album!
-    
+    private let placeholder = UIImage(systemName: "photo")!
     // MARK: - Subviews
     let artworkImageView = UIImageView()
     let titleLabel = UILabel()
@@ -24,7 +24,7 @@ final class AlbumCellView: UIView {
     }
     /// 즐겨찾기 상태가 바뀔 때 호출
     var favoriteToggled: ((String) -> Void)?
-
+    
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,7 +33,7 @@ final class AlbumCellView: UIView {
         setupActions()
     }
     required init?(coder: NSCoder) { fatalError() }
-
+    
     // MARK: - Styling
     private func style() {
         artworkImageView.contentMode = .scaleAspectFill
@@ -47,6 +47,8 @@ final class AlbumCellView: UIView {
         trackCountLabel.textColor = .lightGray
         
         favoriteButton.tintColor = .systemRed
+        
+        artworkImageView.image = placeholder
         updateFavoriteUI()
     }
     
@@ -54,7 +56,7 @@ final class AlbumCellView: UIView {
         let imageName = isFavorite ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
-
+    
     // MARK: - Layout
     private func setupLayout() {
         [artworkImageView, titleLabel, subtitleLabel, trackCountLabel, favoriteButton].forEach {
@@ -66,36 +68,36 @@ final class AlbumCellView: UIView {
             artworkImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             artworkImageView.widthAnchor.constraint(equalToConstant: 60),
             artworkImageView.heightAnchor.constraint(equalTo: artworkImageView.widthAnchor),
-
+            
             favoriteButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             favoriteButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             favoriteButton.widthAnchor.constraint(equalToConstant: 30),
             favoriteButton.heightAnchor.constraint(equalToConstant: 30),
-
+            
             titleLabel.topAnchor.constraint(equalTo: artworkImageView.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: artworkImageView.trailingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -12),
-
+            
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             subtitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-
+            
             trackCountLabel.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 2),
             trackCountLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             trackCountLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
         ])
     }
-
+    
     // MARK: - Actions
     private func setupActions() {
         favoriteButton.addTarget(self, action: #selector(didTapFavorite), for: .touchUpInside)
     }
-
+    
     @objc private func didTapFavorite() {
         isFavorite.toggle()
         favoriteToggled?(album.id)
     }
-
+    
     // MARK: - Configuration
     func configure(with album: Album, isFavorite: Bool) {
         self.album = album
@@ -103,9 +105,17 @@ final class AlbumCellView: UIView {
         subtitleLabel.text = album.artists.first?.name ?? "Unknown"
         trackCountLabel.text = "\(album.total_tracks) 곡"
         self.isFavorite = isFavorite         // 초기 상태 반영
-        Task {
-            let img = await APIClient.shared.getImage(with: album.images.first?.url)
-            DispatchQueue.main.async { self.artworkImageView.image = img }
-        }
+    }
+    
+    func setImage(_ image: UIImage) {
+        artworkImageView.image = image
+    }
+    
+    func reset() {
+        artworkImageView.image = nil
+        titleLabel.text = nil
+        subtitleLabel.text = nil
+        trackCountLabel.text = nil
+        isFavorite = false
     }
 }

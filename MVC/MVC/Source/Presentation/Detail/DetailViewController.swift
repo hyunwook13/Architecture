@@ -40,7 +40,8 @@ final class DetailViewController: UIViewController {
         Task {
             let width = view.bounds.width - 32
             let size = CGSize(width: width, height: width)
-            let image = await APIClient.shared.getImage(with: album.images.first?.url, size: size)
+            print(size)
+            let image = try await APIClient.shared.getImage(with: album.images.first?.url, size: size)
             detailView.setImage(image)
         }
     }

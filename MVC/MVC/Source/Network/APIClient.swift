@@ -6,13 +6,12 @@
 //
 
 import UIKit
-//95d2af3fb09f4610bb7d06856f4c6b99
-//312b2606bbea499da8b67cf6ba2b3ead
+
 let clientID = "Spotify ID를 입력해주세요"
 let clientSecret = "Spotify Sceret을 입력해주세요"
 
 protocol ServiceType {
-    func getImage(with urlStr: String?, size: CGSize) async -> UIImage
+    func getImage(with urlStr: String?, size: CGSize) async throws -> UIImage
     func fetchAlbums() async throws -> BrowseNewReleasesResponse
 }
 
@@ -42,7 +41,6 @@ final class APIClient: ServiceType {
     
     private let baseURL = URL(string: "https://api.spotify.com/v1")!
     private var token: String?
-    private static let placeholder = UIImage(systemName: "photo")!
     
     func fetchAlbums() async throws -> BrowseNewReleasesResponse {
         return try await perform(
@@ -51,11 +49,15 @@ final class APIClient: ServiceType {
         )
     }
     
-    func getImage(with urlString: String?, size: CGSize = .init(width: 60, height: 60)) async -> UIImage {
+    func getImage(with urlString: String?, size: CGSize = .init(width: 60, height: 60)) async throws -> UIImage {
         guard
             let str = urlString,
             let url = URL(string: str)
-        else { return Self.placeholder }
+        else { throw TokenError.invalidURL }
+        
+        if let cached = ImageCache.shared.image(for: str, size: size) {
+            return cached
+        }
         
         do {
             let (data, resp) = try await URLSession.shared.data(from: url)
@@ -64,11 +66,12 @@ final class APIClient: ServiceType {
                 (200..<300).contains(http.statusCode),
                 let img = UIImage.downsampledImage(from: data, to: size)
             else {
-                return Self.placeholder
+                throw TokenError.badResponse(statusCode: -1)
             }
+            ImageCache.shared.insert(img, for: str, size: size)
             return img
         } catch {
-            return Self.placeholder
+            throw error
         }
     }
     

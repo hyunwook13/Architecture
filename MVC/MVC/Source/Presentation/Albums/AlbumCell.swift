@@ -6,7 +6,7 @@
 //
 
 protocol AlbumCellDelegate: AnyObject {
-  func albumCell(_ cell: AlbumCell, didToggleFavoriteFor albumID: String)
+    func albumCell(_ cell: AlbumCell, didToggleFavoriteFor albumID: String)
 }
 
 import UIKit
@@ -25,8 +25,17 @@ final class AlbumCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellView.reset()
+    }
+    
     func configure(with album: Album, isFavorite: Bool) {
         cellView.configure(with: album, isFavorite: isFavorite)
+    }
+    
+    func setImage(_ image: UIImage) {
+        cellView.setImage(image)
     }
     
     private func setup() {
