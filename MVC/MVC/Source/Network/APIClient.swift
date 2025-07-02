@@ -10,11 +10,6 @@ import UIKit
 let clientID = "Spotify ID를 입력해주세요"
 let clientSecret = "Spotify Sceret을 입력해주세요"
 
-protocol ServiceType {
-    func getImage(with urlStr: String?, size: CGSize) async throws -> UIImage
-    func fetchAlbums() async throws -> BrowseNewReleasesResponse
-}
-
 enum TokenError: Error, CustomDebugStringConvertible {
     case invalidURL
     case badResponse(statusCode: Int)
@@ -35,7 +30,7 @@ enum TokenError: Error, CustomDebugStringConvertible {
     }
 }
 
-final class APIClient: ServiceType {
+final class APIClient {
     static let shared = APIClient()
     private init() {}
     
