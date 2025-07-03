@@ -1,6 +1,6 @@
 //
 //  UIImage + Extension.swift
-//  MVC
+//  MVP
 //
 //  Created by 이현욱 on 6/30/25.
 //
