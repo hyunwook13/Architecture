@@ -78,43 +78,52 @@
 
 ## MVC
 ### 일반적인 MVC 구조
-
-![](https://camo.githubusercontent.com/9104b26b403abd0bd2bfedad49d85e170f9f6d3af294de1a92da0c27aab3386d/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f313230302f312a6330614761444e583431717536653845344f456777512e706e67)
+![](https://camo.githubusercontent.com/663229d7d1577ed7c24eef04a902a723770eb75438d5d697a0db7d29dc71ea0e/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f323030302f312a45394135664f7253723079566d63374b6c79354336412e706e67)
 MVC
 * Model
 * View
 * Controller
 
-사용자 입력 -> View -> (send action) Controller -> Model -> Controller -> View Update 순으로 진행된다.
 
+View -> Controller -> Model -> Noti to View -> Get Data from Model
 
 ### 장점
 
-| 항목                | 설명 |
-|---------------------|------|
-| 책임 분리           | Model, View, Controller가 명확히 분리되어 있음 |
-| 구조 명확성         | 애플리케이션 흐름과 데이터 이동 경로가 눈에 보임 |
-| 테스트 용이성       | 비즈니스 로직과 UI 분리 덕분에 단위 테스트가 쉬움 |
-| 재사용성            | View, Model을 다른 화면에서도 재사용 가능 |
-| 플랫폼 범용성       | 웹, 데스크탑, 모바일 등 다양한 환경에 적용 가능 |
+| 항목               | 설명 |
+|--------------------|------|
+| 역할 분리의 시작점 | Model, View, Controller의 책임을 나누는 첫 구조로 개념적 이해가 쉬움 |
+| 빠른 개발 가능     | View와 Controller가 직접 연결되어 있어 작은 프로젝트에선 빠른 UI 반응 구현 가능 |
+| 단순한 구조에 적합 | 복잡한 설계 없이 기능 구현 중심의 앱을 빠르게 만들기 유리 |
+| 초기 학습 부담 적음 | 아키텍처 초입에서 접근하기 쉬운 구조 (코드 흐름이 눈에 보임) |
 
-###  단점
 
-| 항목                | 설명 |
-|---------------------|------|
-| 초기 구현 복잡성    | 역할을 나누기 위한 세팅이 많고, 설계에 시간 소요 |
-| 작은 앱에 과함      | 단순한 기능에도 구조를 나누는 게 오히려 비효율적일 수 있음 |
-| Controller 비대화 위험 | View와 Controller 간 결합도가 높아지면 Massive Controller 현상 발생 가능 |
-| 학습 난이도         | 설계 경험이 부족한 경우 올바르게 적용하기 어려움 |
+### 단점
 
-### 정리 
- 전통적인 MVC는 작은 앱이나 구조가 단순한 프로젝트에선 효율적이지만,
- View와 Controller의 독립성이 낮아 재사용성과 테스트 효율이 떨어지고,
-앱이 커질수록 생산성도 급격히 저하된다.
+| 항목                   | 설명 |
+|------------------------|------|
+| **양방향 의존성**       | Model, View, Controller가 서로 참조하면서 **강결합** 구조로 변질되기 쉬움 |
+| **유지보수 어려움**     | 하나의 변경이 다른 모든 컴포넌트에 영향을 줄 수 있음|
+| **테스트 어려움**       | 각 컴포넌트가 서로 연결되어 있어 단위 테스트 작성이 어려움 |
+| **디버깅 복잡도 증가**  | 상태 변화의 흐름이 복잡하게 얽혀 있어 버그 추적이 힘들어짐 |
+| **규모 확장 어려움**    | 구조가 커지면 모듈 간 책임이 흐려지고 유지 비용이 증가함 |
 
-### Apple MVC 
+---
+MVC 각각의 요소가 강하게 의존하고 있어 독립성이 좋지 않다. 
+애플은 이를 해결하기 위한 자체의 MVC를 제시한다.
+또한 빠른 앱 개발과 간단한 구조를 제공하기 위해 `UIViewController`를 중심으로 한 Apple MVC를 도입했다.
+
+
+### Apple MVC
+![](https://camo.githubusercontent.com/9104b26b403abd0bd2bfedad49d85e170f9f6d3af294de1a92da0c27aab3386d/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f313230302f312a6330614761444e583431717536653845344f456777512e706e67)
+
+사용자 입력 -> View -> (send action) Controller -> Model -> Controller -> View Update 순으로 진행된다.
+
+View와 Controller를 분리시켜 독립성을 높히려던 의도와 다르게 실제 아키텍쳐는 아래와 같은 다이어그램과 같이 흐름을 갖게 되었다.
+
+
+### 실제 Apple MVC 다이어그램
 ![](https://camo.githubusercontent.com/cd5847debf1f3d932c42971b52c6e860aecb1364f8a25367cbb909fbb12cd81d/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f313630302f312a506b576a4455306a71474a4f42393732634d73726e412e706e67)
-Apple은 빠른 앱 개발과 간단한 구조를 제공하기 위해 `UIViewController`를 중심으로 한 Apple MVC를 도입했다.
+
 
 ###  장점
 
@@ -137,13 +146,116 @@ Apple은 빠른 앱 개발과 간단한 구조를 제공하기 위해 `UIViewCon
 | 책임 분리 불명확    | SRP(Single Responsibility Principle)를 어기기 쉬움 |
 
 ### 정리 
-Apple MVC는 View와 Controller를 통합한 구조로,
-**작은 프로젝트에서는 적은 학습으로 빠르게 결과물을 만들 수 있어 초기 생산성이 높다.**
 
- 하지만 구조적 한계를 내포하고 있어,
-프로젝트 규모가 커질수록 View와 Controller를 **별도로 테스트하거나 유지보수하는 것이 어려워진다.**
-UIViewController는 UI 렌더링, 사용자 입력 처리, Model 조작, 네트워크 요청까지 모두 담당하게 되며,
-그 결과 **수백~수천 줄의 코드가 한 파일에 몰리는 Massive ViewController 현상**이 발생한다.
+Apple의 MVC는 View와 Controller를 사실상 UIViewController에 통합한 구조로,
+
+**작고 단순한 앱에서는 적은 학습 비용으로 빠르게 개발할 수 있어 초기 생산성이 높다.**
+
+  
+
+하지만 이 구조는 **View와 Controller 간 독립성이 낮고**,
+
+UIViewController가 **UI 렌더링, 사용자 입력 처리, Model 조작, 네트워크 요청**까지 모두 떠맡게 되면서
+
+**재사용성, 테스트 효율, 유지보수성 측면에서 한계를 드러낸다.**
+
+  
+
+결과적으로 프로젝트 규모가 커질수록
+
+**ViewController 하나에 수백~수천 줄의 코드가 몰리는 Massive ViewController 현상**이 발생하고,
+
+앱 전체의 구조적 생산성도 급격히 저하된다.
 
 ## MVP 
 ![](https://camo.githubusercontent.com/808f617f783a055a48d4f57a224d0765d21bcb271edbd011e2dfcd0d35fc5734/68747470733a2f2f63646e2d696d616765732d312e6d656469756d2e636f6d2f6d61782f313630302f312a684b5543504548673654447a3667744f6c6e465977512e706e67)
+MVP
+* Model
+* View
+* Presenter
+
+
+**MVC에서는 ViewController가 View와 Controller 역할을 동시에 맡아 비대해지고, 테스트와 유지보수가 어려워진 문제를 해결하기 위해 제시된 아키텍쳐**
+
+UI 로직과 비즈니스 로직을 명확히 분리하려고,
+
+**Presenter가 View와 Model 사이를 조정하고 View는 dumb하게 유지하는 MVP가 등장함.**
+
+
+### 장점
+
+| 항목                | 설명 |
+|---------------------|------|
+| 책임 분리           | View와 Presenter가 명확히 분리되어 역할이 깔끔함 |
+| 테스트 용이성       | Presenter는 View에 의존하지 않고 interface로만 연결되어 단위 테스트에 적합 |
+| 유지보수 편리성     | UI 로직과 비즈니스 로직이 분리되어 수정 시 영향 범위가 작음 |
+| UI 로직 재사용성    | Presenter는 플랫폼에 독립적이라 여러 View에서 재사용 가능 |
+| 구조적 일관성       | View는 dumb하게, Presenter가 주도적으로 로직을 처리하는 구조로 통일감 있음 |
+
+### 단점
+
+| 항목                | 설명 |
+|---------------------|------|
+| 초기 구조 설계 부담 | Interface 설계와 역할 분리에 시간과 고민이 필요함 |
+| 작은 화면에도 과함  | 단순한 화면에 Presenter까지 두면 오히려 복잡해짐 |
+| Presenter 비대화    | UI 로직과 비즈니스 로직이 섞이며 Presenter가 또다시 비대해질 수 있음 |
+| View와의 연결 번거로움 | View 인터페이스를 일일이 구현해야 하므로 반복 코드가 많아짐 |
+| 데이터 바인딩 부재   | MVVM과 달리 양방향 데이터 바인딩이 없어 UI 업데이트를 수동 처리해야 함 |
+
+### 정리 
+UI 로직은 Presenter로 분리하고, View는 Interface를 통해 Presenter에 이벤트만 전달함으로써
+
+**책임을 명확히 분리하고 테스트 가능성을 높이는 구조적 대안을 제공한다.**
+
+  
+
+다만, MVP는 View를 추상화하기 위한 **interface 설계와 수동 연결 작업이 필요**해
+
+**작은 화면이나 단순한 기능에도 오버헤드가 발생할 수 있다는 단점**
+View와 Presenter가 1:1 대응해야만 하는 단점이 존재
+
+## MVVM 
+![enter image description here](https://learn.microsoft.com/ko-kr/dotnet/architecture/maui/media/mvvm-pattern.png)
+MVVM
+* View
+* Model
+* ViewModel
+
+MVP는 Controller의 비대화를 해결했지만, **UI 상태 관리와 반복적인 연결 코드의 부담**을 해결하지 못했다.
+
+MVVM은 **상태 중심 설계와 바인딩 구조**로 이러한 문제를 근본적으로 줄이기 위해 등장했다.
+
+
+### 장점
+
+| 항목               | 설명 |
+|--------------------|------|
+| UI와 로직의 철저한 분리 | View는 상태를 보여주고, ViewModel은 로직과 상태를 관리함 |
+| 테스트 용이성        | ViewModel은 UI에 의존하지 않기 때문에 단위 테스트가 쉬움 |
+| 상태 기반 설계       | 이벤트가 아닌 상태로 UI를 구성할 수 있어 선언적 UI 설계에 유리 |
+| 선언형 UI와 궁합 좋음 | SwiftUI, Jetpack Compose 등과 잘 어울림 |
+| 재사용성            | ViewModel은 여러 View에서 재사용 가능 (로직 재활용 가능) |
+
+
+### 단점
+
+| 항목               | 설명 |
+|--------------------|------|
+| 초기 설계 복잡성     | 상태, 입력, 출력 등을 어디까지 ViewModel에 넣을지 경계가 모호할 수 있음 |
+| ViewModel 비대화 위험 | ViewModel이 모든 상태를 품다 보면 다시 비대해질 가능성이 있음 |
+| 바인딩 비용          | UIKit 등 바인딩 자동화가 없는 환경에선 수동 구현 필요 (Rx/Combine 없으면 번거로움) |
+| 과도한 추상화        | 지나치게 구조화하려다 오히려 코드가 복잡하고 추적하기 어려워질 수 있음 |
+
+### 정리
+MVVM은 MVP의 **반복적이고 수동적인 View 연결**과 Presenter가 직접 View를 조작하던 구조를
+
+상태 중심으로 전환해, ViewModel은 “상태만” 책임지고 View는 바인딩으로 반응하게 함으로써
+
+Presenter의 비대화 문제를 구조적으로 해결했다.
+
+허나 여전히 ViewModel 자체가 비대해질 수 있다는 문제가 존재한다.
+## VIPER
+
+## RIBs
+
+## Clean-Architecture
