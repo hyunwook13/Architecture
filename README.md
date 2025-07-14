@@ -255,7 +255,43 @@ Presenter의 비대화 문제를 구조적으로 해결했다.
 
 허나 여전히 ViewModel 자체가 비대해질 수 있다는 문제가 존재한다.
 ## VIPER
+![](https://ckl-website-static.s3.amazonaws.com/wp-content/uploads/2016/04/Viper-Module.png.webp)
+VIPER
+* View
+* Interactor
+* Presenter
+* Entity
+* Router
+
+기존에 존재하던 ViewModel, Controller, Presenter의 역할을 더 잘게 쪼개놓은 아키텍쳐, 클린 아키텍쳐의 계층 원칙을 iOS 식으로 번역한 형태
+
+View는 화면을 표현, Presenter는 화면에서 필요한 처리를 맡아서 관리, 
+화면에서 화면 전환이 필요하다면 Router, 비즈니스 로직이 필요하다면 Interactor를 호출하고, Interacter는 Entity를 호출하여 데이터를 업데이트함
+### 장점 
+| 항목 | 설명 |
+|-----------|------|
+| **역할 분리 (SRP)** | View, Presenter, Interactor 등의 책임이 명확하게 분리되어 유지보수가 쉬움 |
+| **테스트 용이성** | Presenter, Interactor는 View에 의존하지 않기 때문에 단위 테스트가 쉽고 안정적임 |
+| **모듈화와 재사용성** | 기능 단위로 구조화되어 각각의 모듈을 재사용하거나 확장하기 용이함 |
+| **Clean Architecture 적용 가능** | VIPER는 클린 아키텍처 원칙을 실현하기 쉬운 구조를 제공함 |
+| **라우팅 책임 분리** | 화면 전환(Router)을 따로 분리하여 ViewController가 간결해짐 |
+### 단점 
+| 항목 | 설명 |
+|-----------|------|
+| **구조 복잡도** | 하나의 기능(화면)마다 5개 이상의 파일이 필요해 오히려 복잡해짐 |
+| **보일러플레이트 코드 증가** | 프로토콜, 클래스, 연결 코드 등 반복적인 코드가 많아짐 |
+| **초기 진입장벽** | 구조와 연결 관계를 처음부터 이해하고 설정하기 어려움 |
+| **오버엔지니어링 우려** | 간단한 기능에도 과하게 나누면 개발 속도가 떨어짐 |
+| **유연성 부족** | 모든 계층이 정형화되어 있어, 빠르게 프로토타입을 만들기 어려움 |
+
+### 정리 
+기존에 있던 패턴들에서 존재하던 문제점을 Router를 통해 비교적 더 줄일 수 있었다 
+허나 당연히 하나의 존재에서 한번에 수행하던 기능들을 쪼개니, 파일과 코드 수가 더욱 많아진다는 단점이 존재한다.
+ 
+## Clean-Architecture
 
 ## RIBs
 
-## Clean-Architecture
+## TCA
+
+
