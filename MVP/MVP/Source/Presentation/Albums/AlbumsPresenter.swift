@@ -18,15 +18,14 @@ final class AlbumsPresenter {
     
     func viewDidLoad() {
         fetchAlbums()
-        print("out")
     }
     
     func count() -> Int { albums.count }
     func album(at idx: IndexPath) -> Album { albums[idx.row] }
     
     func didSelectRow(at idx: IndexPath) {
-        let a = album(at: idx)
-        onSelectAlbum?(a)
+        let album = album(at: idx)
+        onSelectAlbum?(album)
     }
     
     private func fetchAlbums() {
@@ -57,78 +56,3 @@ final class AlbumsPresenter {
         }
     }
 }
-
-//final class AlbumsPresenter {
-//    private var albums: [Album] = []
-//
-//    private var view: AlbumsView!
-//
-//    init(view: AlbumsView) {
-//        self.view = view
-//    }
-//
-//    func viewDidLoad() {
-//        fetchAlbums()
-//    }
-//
-//    func count() -> Int {
-//        return albums.count
-//    }
-//
-//    func album(at idx: IndexPath) -> Album {
-//        return albums[idx.row]
-//    }
-//
-//    func selectedAt(_ idx: IndexPath) {
-//        let album = album(at: idx)
-//        view?.showAlbumDetail(with: album)
-//    }
-//
-//    func getImage(with url: String?) async -> UIImage? {
-//        guard let urlStr = url else { return nil }
-//
-//        do {
-//            let img = try await APIClient.shared.getImage(with: urlStr)
-//            return img
-//        } catch {
-//            return nil
-//        }
-//    }
-//
-//    func configure(_ cell: AlbumCell, at indexPath: IndexPath) {
-//        let album = album(at: indexPath)
-//
-//        cell.presenter = AlbumCellPresenter(view: cell)
-//
-//        cell.presenter!.configure(view: cell, albumID: album.id, title: album.name, artist: album.artists.first?.name, trackCount: album.total_tracks)
-//
-//        cell.presenter!.delegate = self
-//
-//        Task {
-//            if let url = album.images.first?.url,
-//               let img = await getImage(with: url) {
-//                DispatchQueue.main.async {
-//                    cell.presenter!.setImage(img)
-//                }
-//            }
-//        }
-//    }
-//
-//    private func fetchAlbums() {
-//        Task {
-//            do {
-//                let response = try await APIClient.shared.fetchAlbums()
-//                albums = response.albums.items
-//                view?.showAlbums()
-//            } catch {
-//                view?.showError("앨범을 불러오지 못했습니다.")
-//            }
-//        }
-//    }
-//}
-//
-//extension AlbumsPresenter: AlbumCellDelegate {
-//    func albumCell(didToggleFavoriteFor albumID: String) {
-//        FavoritesManager.shared.toggleFavorite(albumID: albumID)
-//    }
-//}

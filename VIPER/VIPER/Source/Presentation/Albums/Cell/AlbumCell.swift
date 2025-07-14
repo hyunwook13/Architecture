@@ -1,15 +1,11 @@
 //
 //  AlbumCell.swift
-//  MVP
+//  VIPER
 //
 //  Created by 이현욱 on 6/30/25.
 //
 
 import UIKit
-
-protocol AlbumCellDelegate: AnyObject {
-    func albumCell(didToggleFavoriteFor albumID: String)
-}
 
 final class AlbumCell: UITableViewCell {
     static let reuseIdentifier = "AlbumCell"
@@ -47,6 +43,11 @@ final class AlbumCell: UITableViewCell {
         isFavorite = false
     }
     
+    func configure(presenter: AlbumCellPresenter) {
+        self.presenter = presenter
+        presenter.viewDidLoad(self)
+    }
+    
     private func updateFavoriteUI() {
         let imageName = isFavorite ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
@@ -57,7 +58,6 @@ final class AlbumCell: UITableViewCell {
     }
     
     @objc private func didTapFavorite() {
-        isFavorite.toggle()
         presenter?.tapFavorite()
     }
     
@@ -125,16 +125,26 @@ final class AlbumCell: UITableViewCell {
     }
 }
 
-extension AlbumCell: AlbumCellView {
-    func configure(title: String, artist: [Artist], trackCount: Int, isFavorite: Bool) {
-        let subtitle = artist.map(\.name).joined(separator: ", ")
-        self.isFavorite = isFavorite
-        titleLabel.text = title
-        subtitleLabel.text = subtitle
-        trackCountLabel.text = "\(trackCount) 곡"
+extension AlbumCell: AlbumsCellViewInput {
+    func reloadCell(_ res: Bool) {
+        isFavorite = res
     }
     
-    func setImage(_ image: UIImage?) {
-        artworkImageView.image = image ?? placeholder
+    func configure(_ album: Album) {
+        let subtitle = album.artists.map { $0.name }.joined(separator: ", ")
+        
+        titleLabel.text = album.name
+        subtitleLabel.text = subtitle
+        trackCountLabel.text = "\(album.total_tracks) 곡"
+    }
+    
+    func setImage(_ img: UIImage) {
+        DispatchQueue.main.async { [weak self] in 
+            self?.artworkImageView.image = img
+        }
+    }
+    
+    func setFavorite(_ isFavorite: Bool) {
+        self.isFavorite = isFavorite
     }
 }
