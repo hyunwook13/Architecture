@@ -289,7 +289,38 @@ View는 화면을 표현, Presenter는 화면에서 필요한 처리를 맡아�
 허나 당연히 하나의 존재에서 한번에 수행하던 기능들을 쪼개니, 파일과 코드 수가 더욱 많아진다는 단점이 존재한다.
  
 ## Clean-Architecture
+![](https://blog.kakaocdn.net/dna/m5RA5/btqFJq0t1fp/AAAAAAAAAAAAAAAAAAAAAAZoB_p3HXOJZHDau7lZMGJYpDbdECRBJDDRqSHWRi7H/img.jpg?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1753973999&allow_ip=&allow_referer=&signature=hw7PCy652K%2BVoEH%2FRedCOR%2BV294%3D)
+- 도메인 중심 아키텍처 (Domain-Centric Architecture)
+- 계층마다 책임 분리:
+    - UI / Presentation
+    - Interface Adapter (Controller, Presenter, Gateway)
+    - Application Business Rule (UseCase)
+    - Enterprise Business Rule (Entity)
 
+안쪽 계층에서는 외부의 계층이 모르도록, 뿐만 아니라 영향을 받지 않도록 설계를 하는 아키텍쳐 ( 의존성 방향이 안쪽으로 )
+
+각 계층에서는 한 계층 위까지만 정보를 알 수 있음
+ex) 프레임워크와 드라이버 계층에 속하는 DB는 그 계층의 위인 인터페이스 적용 계층(초록색)까지만 알 수 있음
+
+만약 내부 계층에서 외부 계층을 호출해야한다면 (그냥 호출 하면 안됨)
+![](https://blog.kakaocdn.net/dna/0O3SF/btqFMHzuzRV/AAAAAAAAAAAAAAAAAAAAAKlZ1ixUgBoW-smjDFkHXlvxMJKoISOQQyz42SSPToCv/img.jpg?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1753973999&allow_ip=&allow_referer=&signature=Me4yQ%2Bi3Zlw3DrVX5RHpVLLry8g%3D)
+위 이미지처럼 Output Port 인터페이스를 만들어 해결
+
+### 장단점
+* VIPER와 유사하지만 아래와 같은 차이점이 존재  
+
+| 항목 | VIPER | Clean Architecture |
+|-----------|------|-----|
+|구조 고정 | View/Interactor/Presenter 등 고정 | 유동적 계층 조합 가능 |
+| 적용 범위 | 화면 중심 | 도메인 중심 |
+| 라우팅 방식 | Router 고정 포함 | 선택적 (필요 시만) |
+| 의존 방향 | 일부 양방향 존재 | 항상 안쪽으로만 의존 |
+| 확장성 | 낮음 | 높음 |
+| 추상화 수준 | 낮음 (구현이 많음) | 높음 (의존성 역전 강조) |
+
+### 정리
+ Clean Architecture는 **중·대형 규모 앱**, **도메인 로직 중심의 서비스**, **테스트가 중요한 서비스**에서 빛을 발함.
+작고 단순한 프로젝트에서는 오히려 **불필요한 복잡성**을 초래할 수 있으므로, **"상황에 맞게 유연하게"** 적용하는 게 핵심.
 ## RIBs
 
 ## TCA
