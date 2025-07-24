@@ -1,6 +1,6 @@
 //
 //  APIClient.swift
-//  RIBs
+//  RIBs-Study
 //
 //  Created by 이현욱 on 6/30/25.
 //

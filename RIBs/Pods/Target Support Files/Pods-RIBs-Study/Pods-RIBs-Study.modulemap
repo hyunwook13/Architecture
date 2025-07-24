@@ -1,0 +1,6 @@
+framework module Pods_RIBs_Study {
+  umbrella header "Pods-RIBs-Study-umbrella.h"
+
+  export *
+  module * { export * }
+}
